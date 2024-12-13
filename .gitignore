@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Firebase service account key
+server/serviceAccountKey.json
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+
+# IDE and editor config files
+.vscode/
+.idea/
+
+# Optional: Coverage folder (if you're using a testing framework that generates this)
+coverage/

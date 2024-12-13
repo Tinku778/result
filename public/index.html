@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Result</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Student Result Lookup</h1>
+    
+    <form id="result-form">
+      <label for="hall-ticket">Enter Hall Ticket Number:</label>
+      <input type="text" id="hall-ticket" name="hall-ticket" required>
+      
+      <button type="submit">Check Result</button>
+    </form>
+    
+    <div id="result">
+      <div id="result-message"></div>
+      <!-- Optional: result container to show both status and marks -->
+      <div class="result-container" style="display:none;" id="result-details">
+        <h2>Result Details</h2>
+        <p class="status" id="result-status"></p>
+        <p class="marks" id="result-marks"></p>
+      </div>
+    </div>
+    
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
