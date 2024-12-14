@@ -1,0 +1,19 @@
+{
+  "name": "st.marys-result-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev", 
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "googleapis": "^105.0.0",
+    "xlsx": "^0.18.5",
+    "netlify-cli": "^14.0.0"
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

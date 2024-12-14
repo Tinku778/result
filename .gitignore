@@ -1,0 +1,31 @@
+# Node modules
+/node_modules/
+
+# Netlify functions
+/netlify/functions/
+
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
+
+# VS Code configuration files
+.vscode/
+
+# NPM logs
+npm-debug.log
+
+# Build output (if you're using a build system like React or Vue)
+build/
+dist/
+
+# Netlify's build cache directory
+.netlify/
+
+# Logs
+*.log
+
+# Environment variables (if you have an .env file for local config)
+.env
+
+# Google API client credentials (if any)
+credentials.json

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Result</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="text"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:focus {
+  outline: 2px solid #4CAF50;
+}
+
+#result {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#result-message {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#result-message.success {
+  color: green; /* Success messages in green */
+}
+
+#result-message.error {
+  color: red; /* Error messages in red */
+}
+
+#result-message p {
+  margin: 5px 0;
+}
+
+.spinner {
+  border: 4px solid transparent;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Optional: styling for displaying both result and marks in the result section */
+.result-container {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.result-container h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.result-container .marks {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.result-container .status {
+  font-size: 16px;
+  color: #4CAF50;
+}
+
+  </style>
+</head>
+<body>
+
+  
+  <div class="container">
+    <h1>CCC@SMEC RESULTS</h1>
+    
+    <form id="result-form">
+      <label for="hall-ticket">Enter Hall Ticket Number:</label>
+      <input type="text" id="hall-ticket" name="hall-ticket" required>
+      
+      <button type="submit">Check Result</button>
+    </form>
+    
+    <div id="result">
+      <div id="result-message"></div>
+      <!-- Optional: result container to show both status and marks -->
+      <div class="result-container" style="display:none;" id="result-details">
+        <h2>Result Details</h2>
+        <p class="status" id="result-status"></p>
+        <p class="marks" id="result-marks"></p>
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+    document.getElementById('result-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent the default form submission
+  
+      const hallTicket = document.getElementById('hall-ticket').value.trim();
+  
+      // Validate the hall ticket input
+      if (!hallTicket) {
+        document.getElementById('result-message').textContent = "Please enter a valid hall ticket number.";
+        return;
+      }
+  
+      // Show spinner while fetching the result
+      document.getElementById('result-message').textContent = '';
+      const spinner = document.createElement('div');
+      spinner.classList.add('spinner');
+      document.getElementById('result').appendChild(spinner);
+  
+      try {
+        // Make a GET request to your Netlify function endpoint
+        const response = await fetch(`/api/checkResult?ticketNumber=${hallTicket}`);
+  
+        if (response.ok) {
+          const data = await response.json();  // Get the result and marks from the backend
+  
+          // Hide spinner and display result
+          spinner.remove();
+          document.getElementById('result-message').innerHTML = ''; // Clear any existing message
+  
+          const resultMessage = `Result: ${data.result}`;
+          const marksMessage = `Marks: ${data.marks}`;
+  
+          // Show result details
+          document.getElementById('result-details').style.display = 'block';
+          document.getElementById('result-status').textContent = resultMessage;
+          document.getElementById('result-marks').textContent = marksMessage;
+  
+          // Add success class if qualified
+          if (data.result === "Qualified") {
+            document.getElementById('result-status').classList.add('success');
+          } else {
+            document.getElementById('result-status').classList.remove('success');
+          }
+        } else {
+          // Handle error response from the Netlify function
+          const errorMessage = await response.text();
+          spinner.remove();
+          document.getElementById('result-message').textContent = `Error: ${errorMessage}`;
+        }
+      } catch (error) {
+        // Handle fetch error
+        spinner.remove();
+        document.getElementById('result-message').textContent = "An error occurred while checking the result. Please try again.";
+        console.error("Error fetching the result:", error);
+      }
+    });
+  </script>
+  
+
+  
+</body>
+</html>
