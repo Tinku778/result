@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"  # Builds your project
+
   publish = "public"  # Path to your static files folder; adjust to "." if files are in root
   functions = "netlify/functions"  # Path to your serverless functions directory
 
