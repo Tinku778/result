@@ -1,9 +1,11 @@
 [build]
-
+  
   publish = "public"  # Path to your static files folder; adjust to "." if files are in root
   functions = "netlify/functions"  # Path to your serverless functions directory
 
 [dev]
+  
+  
   functions = "netlify/functions"  # Local path to serverless functions
   publish = "public"  # Local path to static files for development
 
