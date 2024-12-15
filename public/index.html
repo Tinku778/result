@@ -149,73 +149,83 @@ button:focus {
     
     <div id="result">
       <div id="result-message"></div>
-      <!-- Optional: result container to show both status and marks -->
+      <!-- Result container to show name, status, and marks -->
       <div class="result-container" style="display:none;" id="result-details">
-        <h2>Result Details</h2>
-        <p class="status" id="result-status"></p>
-        <p class="marks" id="result-marks"></p>
+          <h2>Result Details</h2>
+          <p class="name" id="result-name"></p> <!-- Added for student's name -->
+          <p class="status" id="result-status"></p>
+          <p class="marks" id="result-marks"></p>
       </div>
-    </div>
+  </div>
+  
     
   </div>
 
   <script>
     document.getElementById('result-form').addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent the default form submission
-  
-      const hallTicket = document.getElementById('hall-ticket').value.trim();
-  
-      // Validate the hall ticket input
-      if (!hallTicket) {
-        document.getElementById('result-message').textContent = "Please enter a valid hall ticket number.";
-        return;
-      }
-  
-      // Show spinner while fetching the result
-      document.getElementById('result-message').textContent = '';
-      const spinner = document.createElement('div');
-      spinner.classList.add('spinner');
-      document.getElementById('result').appendChild(spinner);
-  
-      try {
-        // Make a GET request to your Netlify function endpoint
-        const response = await fetch(`/api/checkResult?ticketNumber=${hallTicket}`);
-  
-        if (response.ok) {
-          const data = await response.json();  // Get the result and marks from the backend
-  
-          // Hide spinner and display result
-          spinner.remove();
-          document.getElementById('result-message').innerHTML = ''; // Clear any existing message
-  
-          const resultMessage = `Result: ${data.result}`;
-          const marksMessage = `Marks: ${data.marks}`;
-  
-          // Show result details
-          document.getElementById('result-details').style.display = 'block';
-          document.getElementById('result-status').textContent = resultMessage;
-          document.getElementById('result-marks').textContent = marksMessage;
-  
-          // Add success class if qualified
-          if (data.result === "Qualified") {
-            document.getElementById('result-status').classList.add('success');
-          } else {
-            document.getElementById('result-status').classList.remove('success');
-          }
-        } else {
-          // Handle error response from the Netlify function
-          const errorMessage = await response.text();
-          spinner.remove();
-          document.getElementById('result-message').textContent = `Error: ${errorMessage}`;
+        event.preventDefault(); // Prevent the default form submission
+
+        const hallTicket = document.getElementById('hall-ticket').value.trim();
+
+        // Validate the hall ticket input
+        if (!hallTicket) {
+            document.getElementById('result-message').textContent = "Please enter a valid hall ticket number.";
+            return;
         }
-      } catch (error) {
-        // Handle fetch error
-        spinner.remove();
-        document.getElementById('result-message').textContent = "An error occurred while checking the result. Please try again.";
-        console.error("Error fetching the result:", error);
-      }
+
+        // Clear previous results and hide the result box
+        const resultDetails = document.getElementById('result-details');
+        resultDetails.style.display = 'none'; // Hide previous result
+        document.getElementById('result-message').textContent = ''; // Clear any existing error message
+        resultDetails.classList.remove('success'); // Remove any success styling
+
+        // Show spinner while fetching the result
+        const spinner = document.createElement('div');
+        spinner.classList.add('spinner');
+        document.getElementById('result').appendChild(spinner);
+
+        try {
+            // Make a GET request to your Netlify function endpoint
+            const response = await fetch(`/api/checkResult?ticketNumber=${hallTicket}`);
+
+            // Hide spinner
+            spinner.remove();
+
+            if (response.ok) {
+                const data = await response.json(); // Get the result, marks, and name from the backend
+
+                // Update and show result details
+                const nameMessage = `Name: ${data.name}`;
+                const resultMessage = `Result: ${data.result}`;
+                const marksMessage = `Marks: ${data.marks}`;
+
+                document.getElementById('result-name').textContent = nameMessage;
+                document.getElementById('result-status').textContent = resultMessage;
+                document.getElementById('result-marks').textContent = marksMessage;
+
+                // Show result details box
+                resultDetails.style.display = 'block';
+
+                // Add success class if qualified
+                if (data.result === "Qualified") {
+                    resultDetails.classList.add('success');
+                } else {
+                    resultDetails.classList.remove('success');
+                }
+            } else {
+                // Handle error response from the Netlify function
+                const errorMessage = await response.json();
+                document.getElementById('result-message').textContent = errorMessage.error || 'An error occurred.';
+            }
+        } catch (error) {
+            // Handle fetch error
+            spinner.remove();
+            document.getElementById('result-message').textContent = "An error occurred while checking the result. Please try again.";
+            console.error("Error fetching the result:", error);
+        }
     });
-  </script>
+</script>
+
   
 
   
