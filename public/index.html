@@ -4,230 +4,273 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Result</title>
+  <!-- Bootstrap CSS for responsive layout --> 
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
-    * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    /* Custom color scheme */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #d9dbbe; /* Light background */
+      color: #343a40; /* Dark text color */
+    }
+/*hi */
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
-  color: #333;
-}
+    h1 {
+      font-size: 30px;
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-.container {
-  width: 100%;
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
+    label, button {
+      font-size: 16px;
+    }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    input[type="text"]:focus {
+      border-color: #28a745;
+      outline: none;
+    }
 
-input[type="text"] {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+    button {
+      padding: 12px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
 
-input[type="text"]:focus {
-  border-color: #4CAF50;
-  outline: none;
-}
+    button:hover {
+      background-color: #218838;
+    }
 
-button {
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
+    button:focus {
+      outline: 2px solid #28a745;
+    }
 
-button:hover {
-  background-color: #45a049;
-}
+    #result-message {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+    }
 
-button:focus {
-  outline: 2px solid #4CAF50;
-}
+    #result-message.success {
+      color: #28a745; /* Green for success */
+    }
 
-#result {
-  margin-top: 20px;
-  text-align: center;
-}
+    #result-message.error {
+      color: #dc3545; /* Red for error */
+    }
 
-#result-message {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 10px;
-}
+    .spinner {
+      border: 4px solid transparent;
+      border-top: 4px solid #28a745;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
 
-#result-message.success {
-  color: green; /* Success messages in green */
-}
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-#result-message.error {
-  color: red; /* Error messages in red */
-}
+    .result-container {
+      display: none;
+      margin-top: 20px;
+    }
 
-#result-message p {
-  margin: 5px 0;
-}
+    .result-container h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
 
-.spinner {
-  border: 4px solid transparent;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
+    .result-container p {
+      font-size: 16px;
+      margin: 8px 0;
+    }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+    .result-container .details {
+      font-weight: bold;
+    }
 
-/* Optional: styling for displaying both result and marks in the result section */
-.result-container {
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  margin-top: 20px;
-}
+    .result-container .qualified {
+      color: #28a745;
+    }
 
-.result-container h2 {
-  font-size: 20px;
-  color: #333;
-  margin-bottom: 10px;
-}
+    /* Mobile responsiveness */
+    @media (max-width: 470px) {
+      .container {
+      max-width: 95%; /* Further reduce width for extra-small devices */
+      margin: 20px auto; /* Adjust margin for compact spacing */
+      padding: 15px; /* Reduce padding for mobile devices */
+    }
 
-.result-container .marks {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 10px;
-}
+    h1 {
+      font-size: 18px; /* Smaller font size for the title */
+    }
 
-.result-container .status {
-  font-size: 16px;
-  color: #4CAF50;
-}
+    input[type="text"], button {
+      font-size: 14px;
+      width: 100%; /* Full width for mobile screens */
+      padding: 10px;
+    }
 
+    input[type="text"] {
+      margin-bottom: 10px; /* Reduce margin for input field */
+    }
+
+    button {
+      padding: 10px 15px; /* Adjust padding for the button */
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px; /* Smaller spinner size */
+      margin: 15px auto;
+    }
+
+    .result-container {
+      text-align: left; /* Align text for better readability */
+    }
+  
+    }
   </style>
 </head>
 <body>
 
-  
   <div class="container">
-    <h1>CCC@SMEC RESULTS</h1>
+    <div class="text-center">
+    <img src="smec.png" alt=""width="100px" height="100px"></div><br>
+    <h1>ST. MARY'S ENGINEERING COLLEGE</h1>
+    <h1 style="color: #ff0019;font-weight:bold;">CCC@SMEC Results</h1>
     
     <form id="result-form">
       <label for="hall-ticket">Enter Hall Ticket Number:</label>
-      <input type="text" id="hall-ticket" name="hall-ticket" required>
-      
+      <input placeholder="Enter here" type="text" id="hall-ticket" name="hall-ticket"  required>
       <button type="submit">Check Result</button>
     </form>
     
     <div id="result">
       <div id="result-message"></div>
       <!-- Result container to show name, status, and marks -->
-      <div class="result-container" style="display:none;" id="result-details">
-          <h2>Result Details</h2>
-          <p class="name" id="result-name"></p> <!-- Added for student's name -->
-          <p class="status" id="result-status"></p>
-          <p class="marks" id="result-marks"></p>
+      <div class="result-container" id="result-details">
+        <h3 style="font-weight: bold;">Result Details</h3>
+        <p><span class="details">Name:</span> <span id="result-name"></span></p>
+        <p><span class="details">Marks:</span> <span id="result-marks"></span></p>
+        <p><span class="details">Result:</span> <span id="result-status" style="font-weight: bold;"></span></p>
+        
+
+        <!-- These fields will only be visible if the result is "Qualified" -->
+        <div id="qualified-info" style="display: none;"><br>
+          <h3 style="font-weight: bold; color: 007bff;">Next Level Details :-</h3>
+          <p><span class="details">Room No:</span> <span id="result-room"></span></p>
+          <p><span class="details">System No:</span> <span id="result-system"></span></p>
+          <p><span class="details">Time:</span> <span id="result-time"></span></p>
+          <br><h2 style="text-align: center;">🎉Congratulations🎉</h2>
+        </div>
       </div>
-  </div>
-  
-    
+    </div>
   </div>
 
   <script>
     document.getElementById('result-form').addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent the default form submission
+      event.preventDefault(); // Prevent the default form submission
 
-        const hallTicket = document.getElementById('hall-ticket').value.trim();
+      let hallTicket = document.getElementById('hall-ticket').value.trim();
 
-        // Validate the hall ticket input
-        if (!hallTicket) {
-            document.getElementById('result-message').textContent = "Please enter a valid hall ticket number.";
-            return;
+  // Convert input to uppercase
+          hallTicket = hallTicket.toUpperCase();
+
+      // Validate the hall ticket input
+      if (!hallTicket) {
+        document.getElementById('result-message').textContent = "Please enter a valid hall ticket number.";
+        return;
+      }
+
+      // Clear previous results and hide the result box
+      const resultDetails = document.getElementById('result-details');
+      resultDetails.style.display = 'none'; // Hide previous result
+      document.getElementById('result-message').textContent = ''; // Clear any existing error message
+
+      // Show spinner while fetching the result
+      const spinner = document.createElement('div');
+      spinner.classList.add('spinner');
+      document.getElementById('result').appendChild(spinner);
+
+      try {
+        // Make a GET request to your Netlify function endpoint
+        const response = await fetch(`/api/checkResult?ticketNumber=${hallTicket}`);
+
+        // Hide spinner
+        spinner.remove();
+
+        if (response.ok) {
+          const data = await response.json(); // Get the result, marks, name, room, system number, and time from the backend
+
+          // Update and show result details
+          const nameMessage = `${data.name}`;
+          const resultMessage = `${data.result}`;
+          const marksMessage = `${data.marks}`;
+          const roomMessage = `${data.room_num}`;
+          const systemMessage = `${data.system_num}`;
+          const timeMessage = `${data.time}`;
+
+          document.getElementById('result-name').textContent = nameMessage;
+          document.getElementById('result-status').textContent = resultMessage;
+          document.getElementById('result-marks').textContent = marksMessage;
+
+          // Show result details box
+          resultDetails.style.display = 'block';
+
+          // Show additional details (Room No, System No, Time) only if result is "Qualified"
+          const qualifiedInfo = document.getElementById('qualified-info');
+          if (data.result === "Qualified") {
+            qualifiedInfo.style.display = 'block';
+            document.getElementById('result-room').textContent = roomMessage;
+            document.getElementById('result-system').textContent = systemMessage;
+            document.getElementById('result-time').textContent = timeMessage;
+            resultDetails.classList.add('qualified');
+          } else {
+            qualifiedInfo.style.display = 'none'; // Hide qualified details if not qualified
+            resultDetails.classList.remove('qualified');
+          }
+
+        } else {
+          // Handle error response from the Netlify function
+          const errorMessage = await response.json();
+          document.getElementById('result-message').textContent = errorMessage.error || 'An error occurred.';
         }
-
-        // Clear previous results and hide the result box
-        const resultDetails = document.getElementById('result-details');
-        resultDetails.style.display = 'none'; // Hide previous result
-        document.getElementById('result-message').textContent = ''; // Clear any existing error message
-        resultDetails.classList.remove('success'); // Remove any success styling
-
-        // Show spinner while fetching the result
-        const spinner = document.createElement('div');
-        spinner.classList.add('spinner');
-        document.getElementById('result').appendChild(spinner);
-
-        try {
-            // Make a GET request to your Netlify function endpoint
-            const response = await fetch(`/api/checkResult?ticketNumber=${hallTicket}`);
-
-            // Hide spinner
-            spinner.remove();
-
-            if (response.ok) {
-                const data = await response.json(); // Get the result, marks, and name from the backend
-
-                // Update and show result details
-                const nameMessage = `Name: ${data.name}`;
-                const resultMessage = `Result: ${data.result}`;
-                const marksMessage = `Marks: ${data.marks}`;
-
-                document.getElementById('result-name').textContent = nameMessage;
-                document.getElementById('result-status').textContent = resultMessage;
-                document.getElementById('result-marks').textContent = marksMessage;
-
-                // Show result details box
-                resultDetails.style.display = 'block';
-
-                // Add success class if qualified
-                if (data.result === "Qualified") {
-                    resultDetails.classList.add('success');
-                } else {
-                    resultDetails.classList.remove('success');
-                }
-            } else {
-                // Handle error response from the Netlify function
-                const errorMessage = await response.json();
-                document.getElementById('result-message').textContent = errorMessage.error || 'An error occurred.';
-            }
-        } catch (error) {
-            // Handle fetch error
-            spinner.remove();
-            document.getElementById('result-message').textContent = "An error occurred while checking the result. Please try again.";
-            console.error("Error fetching the result:", error);
-        }
+      } catch (error) {
+        // Handle fetch error
+        spinner.remove();
+        document.getElementById('result-message').textContent = "An error occurred while checking the result. Please try again.";
+        console.error("Error fetching the result:", error);
+      }
     });
-</script>
-
-  
-
-  
+  </script>
 </body>
 </html>
